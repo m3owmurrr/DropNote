@@ -1,0 +1,154 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API для сервиса заметок с хранением в PostgreSQL и MinIO",
+        "title": "DropNote API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/notes": {
+            "post": {
+                "description": "Принимает JSON с текстом заметки, сохраняет мета-данные в PostgreSQL, а содержимое — в MinIO.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Создание заметки",
+                "parameters": [
+                    {
+                        "description": "Данные заметки",
+                        "name": "note",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Note"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Заметка успешно создана, возвращает note_id",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный JSON",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "415": {
+                        "description": "Content-Type должен быть application/json",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/notes/{note_id}": {
+            "get": {
+                "description": "Возвращает заметку по её идентификатору, переданному в URL.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Получение заметки",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID заметки",
+                        "name": "note_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Заметка успешно получена",
+                        "schema": {
+                            "$ref": "#/definitions/model.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный запрос",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Заметка не найдена",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "Эндпоинт для проверки работоспособности API",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Проверка состояния сервиса",
+                "responses": {
+                    "200": {
+                        "description": "Its alive!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Note": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "public": {
+                    "type": "boolean"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -23,6 +23,19 @@ func NewNoteHandler(serv service.Service, logger *slog.Logger) *NoteHandler {
 	}
 }
 
+// CreateNote создаёт новую заметку
+//
+// @Summary Создание заметки
+// @Description Принимает JSON с текстом заметки, сохраняет мета-данные в PostgreSQL, а содержимое — в MinIO.
+// @Tags notes
+// @Accept json
+// @Produce json
+// @Param note body model.Note true "Данные заметки"
+// @Success 201 {object} map[string]string "Заметка успешно создана, возвращает note_id"
+// @Failure 400 {string} string "Некорректный JSON"
+// @Failure 415 {string} string "Content-Type должен быть application/json"
+// @Failure 500 {string} string "Ошибка сервера"
+// @Router /api/notes [post]
 func (nh *NoteHandler) CreateNote(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Content-Type") != "application/json" {
 		nh.logger.Error("Content-Type is not application/json")
@@ -48,6 +61,19 @@ func (nh *NoteHandler) CreateNote(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"note_id": note.NoteId})
 }
 
+// GetNote получает заметку по ID
+//
+// @Summary Получение заметки
+// @Description Возвращает заметку по её идентификатору, переданному в URL.
+// @Tags notes
+// @Accept json
+// @Produce json
+// @Param note_id path string true "ID заметки"
+// @Success 200 {object} model.Note "Заметка успешно получена"
+// @Failure 400 {string} string "Некорректный запрос"
+// @Failure 404 {string} string "Заметка не найдена"
+// @Failure 500 {string} string "Ошибка сервера"
+// @Router /api/notes/{note_id} [get]
 func (nh *NoteHandler) GetNote(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	noteID, exists := vars["note_id"]
