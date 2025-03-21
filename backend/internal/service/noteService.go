@@ -29,13 +29,13 @@ func (ns *NoteService) CreateNote(note *model.Note) error {
 	return nil
 }
 
-// func (ns *NoteService) GetNote(id string) (*model.Note, error) {
-// 	note, err := ns.s3Storage.GetNote(id)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return note, nil
-// }
+func (ns *NoteService) GetNote(id string) (*model.Note, error) {
+	note, err := ns.s3Storage.GetNote(id)
+	if err != nil {
+		return nil, err
+	}
+	return note, nil
+}
 
 // func (ns *NoteService) GetPublicNotes() (model.Notes, error) {
 // 	metaNotes, err := ns.metaDB.GetPublicNotes()

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"github.com/m3owmurrr/DropNote/backend/internal/model"
 	"github.com/m3owmurrr/DropNote/backend/internal/service"
 )
@@ -47,23 +48,23 @@ func (nh *NoteHandler) CreateNote(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"note_id": note.NoteId})
 }
 
-// func (nh *NoteHandler) GetNote(w http.ResponseWriter, r *http.Request) {
-// 	vars := mux.Vars(r)
-// 	noteID, exists := vars["note_id"]
-// 	if !exists {
-// 		http.Error(w, "note_id is required", http.StatusBadRequest)
-// 		return
-// 	}
+func (nh *NoteHandler) GetNote(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	noteID, exists := vars["note_id"]
+	if !exists {
+		http.Error(w, "note_id is required", http.StatusBadRequest)
+		return
+	}
 
-// 	note, err := nh.serv.GetNote(noteID)
-// 	if err != nil {
-// 		http.Error(w, "Note not found", http.StatusNotFound)
-// 		return
-// 	}
+	note, err := nh.serv.GetNote(noteID)
+	if err != nil {
+		http.Error(w, "Note not found", http.StatusNotFound)
+		return
+	}
 
-// 	w.Header().Set("Content-Type", "application/json")
-// 	json.NewEncoder(w).Encode(note)
-// }
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(note)
+}
 
 // func (nh *NoteHandler) GetPublicNotes(w http.ResponseWriter, r *http.Request) {
 // 	notes, err := nh.serv.GetPublicNotes()

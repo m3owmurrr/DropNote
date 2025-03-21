@@ -62,7 +62,7 @@ func RunServer() {
 	subRouter := router.PathPrefix("/api").Subrouter()
 	subRouter.HandleFunc("/notes", noteHandler.CreateNote).Methods(http.MethodPost, http.MethodOptions) // Добавлен OPTIONS
 	// subRouter.HandleFunc("/notes/public", noteHandler.GetPublicNotes).Methods(http.MethodGet)
-	// subRouter.HandleFunc("/notes/{note_id}", noteHandler.GetNote).Methods(http.MethodGet, http.MethodOptions)
+	subRouter.HandleFunc("/notes/{note_id}", noteHandler.GetNote).Methods(http.MethodGet, http.MethodOptions)
 
 	routerWithCORS := c.Handler(router) // Оборачиваем роутер в CORS middleware
 
