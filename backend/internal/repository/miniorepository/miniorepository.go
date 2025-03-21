@@ -2,6 +2,7 @@ package miniorepository
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -45,34 +46,34 @@ func (nr *NoteRepository) CreateNote(note *model.Note) error {
 	return nil
 }
 
-// func (nr *NoteRepository) GetNote(id string) (*model.Note, error) {
-// 	noteFile := fmt.Sprintf("%s.txt", id)
+func (nr *NoteRepository) GetNote(id string) (*model.Note, error) {
+	noteFile := fmt.Sprintf("%s.txt", id)
 
-// 	err := nr.s3.FGetObject(context.TODO(), "notes-bucket", id, noteFile, minio.GetObjectOptions{})
-// 	if err != nil {
-// 		log.Println("Ошибка при получении объекта:", err)
-// 		return nil, err
-// 	}
+	err := nr.s3.FGetObject(context.TODO(), "notes-bucket", id, noteFile, minio.GetObjectOptions{})
+	if err != nil {
+		log.Println("Ошибка при получении объекта:", err)
+		return nil, err
+	}
 
-// 	data, err := os.ReadFile(noteFile)
-// 	if err != nil {
-// 		log.Println("Ошибка при чтении файла:", err)
-// 		return nil, err
-// 	}
+	data, err := os.ReadFile(noteFile)
+	if err != nil {
+		log.Println("Ошибка при чтении файла:", err)
+		return nil, err
+	}
 
-// 	defer os.Remove(noteFile)
+	defer os.Remove(noteFile)
 
-// 	note := model.Note{
-// 		NoteId: id,
-// 		Text:   string(data),
-// 	}
+	note := model.Note{
+		NoteId: id,
+		Text:   string(data),
+	}
 
-// 	return &note, nil
-// }
+	return &note, nil
+}
 
-// func (nr *NoteRepository) GetPublicNotes() (model.Notes, error) {
-// 	return nil, nil
-// }
+func (nr *NoteRepository) GetPublicNotes() (model.Notes, error) {
+	return nil, nil
+}
 
 func (nr *NoteRepository) DeleteNote(id string) error {
 	err := nr.s3.RemoveObject(context.TODO(), "notes-bucket", id, minio.RemoveObjectOptions{})

@@ -1,3 +1,8 @@
+// @title DropNote API
+// @version 1.0
+// @description API для сервиса заметок с хранением в PostgreSQL и MinIO
+// @host localhost:8080
+// @BasePath /
 package app
 
 import (
@@ -9,8 +14,9 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
+	httpSwagger "github.com/swaggo/http-swagger"
 
-	// _ "github.com/m3owmurrr/DropNote/docs"
+	_ "github.com/m3owmurrr/DropNote/backend/docs"
 	"github.com/m3owmurrr/DropNote/backend/internal/handler"
 	"github.com/m3owmurrr/DropNote/backend/internal/repository/miniorepository"
 	"github.com/m3owmurrr/DropNote/backend/internal/repository/pgrepository"
@@ -19,9 +25,22 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/rs/cors"
-	// httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// RunServer инициализирует и запускает HTTP-сервер DropNote.
+//
+// 1. Подключается к PostgreSQL для хранения метаданных заметок.
+// 2. Создаёт MinIO клиент для хранения содержимого заметок.
+// 3. Регистрирует маршруты API через Gorilla Mux.
+// 4. Запускает сервер на порту, указанном в `config.Cfg.Server`.
+//
+// Сервер обрабатывает два основных маршрута API:
+// - `POST /api/notes` — создание новой заметки.
+// - `GET /api/notes` — получение заметки по ID.
+//
+// Сервер логирует события через `slog.Logger`.
+//
+// При ошибках подключения к базе данных или MinIO — завершает работу.
 func RunServer() {
 	opts := &slog.HandlerOptions{
 		AddSource: true,
@@ -48,7 +67,7 @@ func RunServer() {
 	router := mux.NewRouter()
 	router.HandleFunc("/health", healthHandler.CheckHealth).Methods(http.MethodGet)
 
-	// router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"}, // Разрешить все домены
@@ -62,7 +81,7 @@ func RunServer() {
 	subRouter := router.PathPrefix("/api").Subrouter()
 	subRouter.HandleFunc("/notes", noteHandler.CreateNote).Methods(http.MethodPost, http.MethodOptions) // Добавлен OPTIONS
 	// subRouter.HandleFunc("/notes/public", noteHandler.GetPublicNotes).Methods(http.MethodGet)
-	// subRouter.HandleFunc("/notes/{note_id}", noteHandler.GetNote).Methods(http.MethodGet, http.MethodOptions)
+	subRouter.HandleFunc("/notes/{note_id}", noteHandler.GetNote).Methods(http.MethodGet, http.MethodOptions)
 
 	routerWithCORS := c.Handler(router) // Оборачиваем роутер в CORS middleware
 
