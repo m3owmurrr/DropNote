@@ -1,1 +1,3 @@
-./backend/.env
+/backend/.env
+/backend/go.mod
+/backend/go.sum
