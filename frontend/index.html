@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <input type="text" id="noteId" placeholder="Поле id заметки">
+            <button onclick="findNote()">Найти</button>
+        </div>
+        <textarea id="noteText" placeholder="Поле ввода заметки"></textarea>
+        <div class="checkbox-group">
+            <input type="checkbox" id="isPublic"  class="check">
+            <label for="isPublic">Опубликовать в свободный доступ</label>
+        </div>
+        <button onclick="sendNote()">Отправить</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
