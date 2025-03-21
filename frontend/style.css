@@ -1,0 +1,88 @@
+body { 
+    font-family: Arial, sans-serif; 
+    padding: 20px;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container { 
+    width: 500px; 
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.input-group button {
+    width: auto; /* Автоматическая ширина под контент */
+    white-space: nowrap; /* Предотвращает перенос текста */
+}
+
+
+textarea { 
+    width: 100%; /* Сделает поле на всю ширину */
+    height: 350px; /* Увеличил высоту */
+    font-size: 18px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: vertical; /* Позволяет изменять высоту вручную */
+}
+
+
+textarea, input, button { 
+    font-size: 18px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input { 
+    flex: 1;
+}
+
+button {
+    width: 100%; /* Кнопка теперь занимает всю ширину */
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: start;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.checkbox-group input {
+    width: 24px; /* Увеличенная ширина */
+    height: 24px; /* Увеличенная высота */
+    flex-grow: 0; /* Запрещаем растяжение */
+}
